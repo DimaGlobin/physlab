@@ -1,5 +1,5 @@
 """Views for the problems app."""
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import AnswerForm
@@ -58,4 +58,39 @@ def problem_result(request, pk):
         'problem': problem,
         'is_correct': attempt.is_correct,
         'user_answer': attempt.user_answer,
+    })
+
+
+def stats(request):
+    """Страница статистики по всем попыткам."""
+    total_attempts = Attempt.objects.count()
+    correct_attempts = Attempt.objects.filter(is_correct=True).count()
+    correct_percent = (
+        round(correct_attempts / total_attempts * 100)
+        if total_attempts > 0 else 0
+    )
+
+    topic_stats = []
+    topics = Topic.objects.annotate(
+        total=Count('problems__attempts'),
+        correct=Count(
+            'problems__attempts',
+            filter=Q(problems__attempts__is_correct=True),
+        ),
+    ).filter(total__gt=0)
+
+    for topic in topics:
+        percent = round(topic.correct / topic.total * 100) if topic.total else 0
+        topic_stats.append({
+            'title': topic.title,
+            'total': topic.total,
+            'correct': topic.correct,
+            'percent': percent,
+        })
+
+    return render(request, 'problems/stats.html', {
+        'total_attempts': total_attempts,
+        'correct_attempts': correct_attempts,
+        'correct_percent': correct_percent,
+        'topic_stats': topic_stats,
     })
