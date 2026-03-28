@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Разделы — PhysLab{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Разделы физики</h1>
+
+{% if topics %}
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    {% for topic in topics %}
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ topic.title }}</h5>
+                {% if topic.description %}
+                <p class="card-text text-muted">{{ topic.description }}</p>
+                {% endif %}
+                <p class="card-text">
+                    <small class="text-muted">Задач: {{ topic.problem_count }}</small>
+                </p>
+                <a href="{% url 'problems:problem_list' topic.slug %}"
+                   class="btn btn-primary">Перейти к задачам</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p class="text-muted">Разделы пока не добавлены.</p>
+{% endif %}
+{% endblock %}
