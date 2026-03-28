@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Результат — PhysLab{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'problems:topic_list' %}">Разделы</a></li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'problems:problem_list' problem.topic.slug %}">{{ problem.topic.title }}</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'problems:problem_detail' problem.pk %}">{{ problem.title }}</a>
+        </li>
+        <li class="breadcrumb-item active">Результат</li>
+    </ol>
+</nav>
+
+<h1 class="mb-3">{{ problem.title }}</h1>
+
+{% if is_correct %}
+<div class="alert alert-success">
+    <strong>Верно!</strong> Ваш ответ: {{ user_answer }}
+</div>
+{% else %}
+<div class="alert alert-danger">
+    <strong>Неверно.</strong> Ваш ответ: {{ user_answer }}.
+    Правильный ответ: {{ problem.answer }}.
+</div>
+{% endif %}
+
+{% if problem.solution %}
+<div class="card mt-3">
+    <div class="card-header">Разбор решения</div>
+    <div class="card-body">
+        <p class="card-text">{{ problem.solution }}</p>
+    </div>
+</div>
+{% endif %}
+
+<div class="mt-4">
+    <a href="{% url 'problems:problem_detail' problem.pk %}" class="btn btn-outline-primary me-2">
+        Попробовать ещё раз
+    </a>
+    <a href="{% url 'problems:problem_list' problem.topic.slug %}" class="btn btn-outline-secondary">
+        К списку задач
+    </a>
+</div>
+{% endblock %}
