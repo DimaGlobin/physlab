@@ -24,12 +24,27 @@
 </div>
 {% else %}
 <div class="alert alert-danger">
-    <strong>Неверно.</strong> Ваш ответ: {{ user_answer }}.
-    Правильный ответ: {{ problem.answer }}.
+    <strong>Неверно.</strong> Ваш ответ: {{ user_answer }}. Попробуйте ещё раз!
 </div>
 {% endif %}
 
-{% if problem.solution %}
+{% if not is_correct and problem.solution %}
+<div class="mt-3">
+    <button class="btn btn-outline-warning" type="button"
+            data-bs-toggle="collapse" data-bs-target="#solution">
+        Посмотреть решение
+    </button>
+    <div class="collapse mt-3" id="solution">
+        <div class="card">
+            <div class="card-header">Разбор решения</div>
+            <div class="card-body">
+                <p class="card-text">{{ problem.solution }}</p>
+                <p class="card-text"><strong>Ответ:</strong> {{ problem.answer }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% elif is_correct and problem.solution %}
 <div class="card mt-3">
     <div class="card-header">Разбор решения</div>
     <div class="card-body">
@@ -40,7 +55,7 @@
 
 <div class="mt-4">
     <a href="{% url 'problems:problem_detail' problem.pk %}" class="btn btn-outline-primary me-2">
-        Попробовать ещё раз
+        {% if is_correct %}Решить ещё раз{% else %}Попробовать ещё раз{% endif %}
     </a>
     <a href="{% url 'problems:problem_list' problem.topic.slug %}" class="btn btn-outline-secondary">
         К списку задач

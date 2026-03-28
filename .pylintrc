@@ -1,0 +1,7 @@
+[MASTER]
+load-plugins=pylint_django
+django-settings-module=physlab.settings
+ignore=migrations
+
+[DESIGN]
+min-public-methods=0

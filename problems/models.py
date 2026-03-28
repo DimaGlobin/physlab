@@ -11,6 +11,8 @@ class Topic(models.Model):
     order = models.PositiveIntegerField('порядок', default=0)
 
     class Meta:
+        """Meta options for Topic."""
+
         ordering = ['order']
         verbose_name = 'раздел'
         verbose_name_plural = 'разделы'
@@ -49,6 +51,8 @@ class Problem(models.Model):
     )
 
     class Meta:
+        """Meta options for Problem."""
+
         verbose_name = 'задача'
         verbose_name_plural = 'задачи'
 
@@ -70,6 +74,8 @@ class Attempt(models.Model):
     created_at = models.DateTimeField('дата попытки', auto_now_add=True)
 
     class Meta:
+        """Meta options for Attempt."""
+
         verbose_name = 'попытка'
         verbose_name_plural = 'попытки'
 
@@ -86,6 +92,8 @@ class Feedback(models.Model):
     created_at = models.DateTimeField('дата', auto_now_add=True)
 
     class Meta:
+        """Meta options for Feedback."""
+
         verbose_name = 'отзыв'
         verbose_name_plural = 'отзывы'
 
