@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}О проекте — PhysLab{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">О проекте</h1>
+
+<p class="lead">
+    <strong>PhysLab</strong> — учебный тренажёр задач по физике, построенный на Django.
+</p>
+<p>
+    Выбирайте раздел, решайте задачи и следите за своей статистикой.
+    Проект создан в учебных целях для демонстрации возможностей Django.
+</p>
+
+<hr class="my-4">
+
+<h3 class="mb-3">Обратная связь</h3>
+
+{% if success %}
+<div class="alert alert-success">Спасибо за ваше сообщение!</div>
+{% endif %}
+
+<form method="post" novalidate>
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="id_name" class="form-label">Имя</label>
+        <input type="text"
+               name="name"
+               id="id_name"
+               value="{{ form.name.value|default:'' }}"
+               class="form-control {% if form.name.errors %}is-invalid{% endif %}">
+        {% for error in form.name.errors %}
+        <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
+    </div>
+    <div class="mb-3">
+        <label for="id_message" class="form-label">Сообщение</label>
+        <textarea name="message"
+                  id="id_message"
+                  rows="4"
+                  class="form-control {% if form.message.errors %}is-invalid{% endif %}">{{ form.message.value|default:'' }}</textarea>
+        {% for error in form.message.errors %}
+        <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
+    </div>
+    <button type="submit" class="btn btn-primary">Отправить</button>
+</form>
+{% endblock %}

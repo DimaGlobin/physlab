@@ -2,8 +2,8 @@
 from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import AnswerForm
-from .models import Attempt, Problem, Topic
+from .forms import AnswerForm, FeedbackForm
+from .models import Attempt, Feedback, Problem, Topic
 
 
 def topic_list(request):
@@ -93,4 +93,26 @@ def stats(request):
         'correct_attempts': correct_attempts,
         'correct_percent': correct_percent,
         'topic_stats': topic_stats,
+    })
+
+
+def about(request):
+    """Страница «О проекте» с формой обратной связи."""
+    success = False
+
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            Feedback.objects.create(
+                name=form.cleaned_data['name'],
+                message=form.cleaned_data['message'],
+            )
+            success = True
+            form = FeedbackForm()
+    else:
+        form = FeedbackForm()
+
+    return render(request, 'problems/about.html', {
+        'form': form,
+        'success': success,
     })
