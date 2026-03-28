@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}{{ topic.title }} — PhysLab{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'problems:topic_list' %}">Разделы</a></li>
+        <li class="breadcrumb-item active">{{ topic.title }}</li>
+    </ol>
+</nav>
+
+<h1 class="mb-4">{{ topic.title }}</h1>
+{% if topic.description %}
+<p class="lead">{{ topic.description }}</p>
+{% endif %}
+
+{% if problems %}
+<div class="list-group">
+    {% for problem in problems %}
+    <a href="{% url 'problems:problem_detail' problem.pk %}"
+       class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+        {{ problem.title }}
+        <span class="badge bg-{% if problem.difficulty == 'easy' %}success{% elif problem.difficulty == 'medium' %}warning text-dark{% else %}danger{% endif %}">
+            {{ problem.get_difficulty_display }}
+        </span>
+    </a>
+    {% endfor %}
+</div>
+{% else %}
+<p class="text-muted">В этом разделе пока нет задач.</p>
+{% endif %}
+{% endblock %}

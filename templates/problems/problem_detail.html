@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}{{ problem.title }} — PhysLab{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'problems:topic_list' %}">Разделы</a></li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'problems:problem_list' problem.topic.slug %}">{{ problem.topic.title }}</a>
+        </li>
+        <li class="breadcrumb-item active">{{ problem.title }}</li>
+    </ol>
+</nav>
+
+<h1 class="mb-3">{{ problem.title }}</h1>
+<span class="badge bg-{% if problem.difficulty == 'easy' %}success{% elif problem.difficulty == 'medium' %}warning text-dark{% else %}danger{% endif %} mb-3">
+    {{ problem.get_difficulty_display }}
+</span>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <p class="card-text">{{ problem.text }}</p>
+    </div>
+</div>
+
+<h5>Ваш ответ</h5>
+<form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="mb-3">
+        <input type="text"
+               name="{{ field.html_name }}"
+               value="{{ field.value|default:'' }}"
+               class="form-control {% if field.errors %}is-invalid{% endif %}"
+               placeholder="Введите ответ">
+        {% for error in field.errors %}
+        <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Проверить</button>
+</form>
+{% endblock %}
