@@ -5,3 +5,6 @@ ignore=migrations
 
 [DESIGN]
 min-public-methods=0
+
+[BASIC]
+no-docstring-rgx=^(test_|setUp|tearDown)
